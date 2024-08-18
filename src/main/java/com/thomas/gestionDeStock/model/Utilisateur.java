@@ -32,7 +32,7 @@ public class Utilisateur extends AbstractEntity{
     @Embedded
     private Adresse adresse;
 
-    @Column(name = "email")
+    @Column(name = "photo")
     private String photo;
 
     @ManyToOne
