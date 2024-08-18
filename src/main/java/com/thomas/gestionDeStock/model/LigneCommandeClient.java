@@ -1,13 +1,9 @@
 package com.thomas.gestionDeStock.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.math.BigDecimal;
 
 @Data
 @NoArgsConstructor
@@ -16,6 +12,12 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "LigneCommandeClient")
 public class LigneCommandeClient  extends AbstractEntity{
+
+    @Column(name = "quantite")
+    private BigDecimal quantite;
+
+    @Column(name = "prixunitaire")
+    private BigDecimal prixUnitaire;
 
     @ManyToOne
     @JoinColumn(name = "idarticle")
