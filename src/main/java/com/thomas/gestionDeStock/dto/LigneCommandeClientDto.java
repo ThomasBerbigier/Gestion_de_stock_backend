@@ -1,5 +1,6 @@
-package dto;
+package com.thomas.gestionDeStock.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.thomas.gestionDeStock.model.LigneCommandeClient;
 import lombok.Builder;
 import lombok.Data;
@@ -18,7 +19,10 @@ public class LigneCommandeClientDto {
 
     private ArticleDto article;
 
+    @JsonIgnore
     private CommandeClientDto commandeClient;
+
+    private Integer idEntreprise;
 
     // Entité vers Dto pour la récupération des données
     public static LigneCommandeClientDto fromEntity(LigneCommandeClient ligneCommandeClient) {
@@ -31,7 +35,7 @@ public class LigneCommandeClientDto {
                 .quantite(ligneCommandeClient.getQuantite())
                 .prixUnitaire(ligneCommandeClient.getPrixUnitaire())
                 .article(ArticleDto.fromEntity(ligneCommandeClient.getArticle()))
-                .commandeClient(CommandeClientDto.fromEntity(ligneCommandeClient.getCommandeClient()))
+                .idEntreprise(ligneCommandeClient.getIdEntreprise())
                 .build();
     }
 
@@ -46,8 +50,7 @@ public class LigneCommandeClientDto {
         ligneCommandeClient.setQuantite(ligneCommandeClientDto.getQuantite());
         ligneCommandeClient.setPrixUnitaire(ligneCommandeClientDto.getPrixUnitaire());
         ligneCommandeClient.setArticle(ArticleDto.toEntity(ligneCommandeClientDto.getArticle()));
-        ligneCommandeClient.setCommandeClient(CommandeClientDto.toEntity(ligneCommandeClientDto.getCommandeClient()));
-
+        ligneCommandeClient.setIdEntreprise(ligneCommandeClient.getIdEntreprise());
         return ligneCommandeClient;
     }
 }

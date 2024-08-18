@@ -1,4 +1,4 @@
-package dto;
+package com.thomas.gestionDeStock.dto;
 
 import com.thomas.gestionDeStock.model.Adresse;
 import lombok.Builder;

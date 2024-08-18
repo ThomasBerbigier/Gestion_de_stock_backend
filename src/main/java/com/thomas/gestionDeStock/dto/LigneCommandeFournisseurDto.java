@@ -1,5 +1,6 @@
-package dto;
+package com.thomas.gestionDeStock.dto;
 
+import com.thomas.gestionDeStock.model.CommandeFournisseur;
 import com.thomas.gestionDeStock.model.LigneCommandeFournisseur;
 import lombok.Builder;
 import lombok.Data;
@@ -20,6 +21,8 @@ public class LigneCommandeFournisseurDto {
 
     private CommandeFournisseurDto commandeFournisseur;
 
+    private Integer idEntreprise;
+
     // Entité vers Dto pour la récupération des données
     public static LigneCommandeFournisseurDto fromEntity(LigneCommandeFournisseur ligneCommandeFournisseur) {
         if (ligneCommandeFournisseur == null) {
@@ -31,7 +34,7 @@ public class LigneCommandeFournisseurDto {
                 .quantite(ligneCommandeFournisseur.getQuantite())
                 .prixUnitaire(ligneCommandeFournisseur.getPrixUnitaire())
                 .article(ArticleDto.fromEntity(ligneCommandeFournisseur.getArticle()))
-                .commandeFournisseur(CommandeFournisseurDto.fromEntity(ligneCommandeFournisseur.getCommandeFournisseur()))
+                .idEntreprise(ligneCommandeFournisseur.getIdEntreprise())
                 .build();
     }
 
@@ -46,7 +49,7 @@ public class LigneCommandeFournisseurDto {
         ligneCommandeFournisseur.setQuantite(ligneCommandeFournisseurDto.getQuantite());
         ligneCommandeFournisseur.setPrixUnitaire(ligneCommandeFournisseurDto.getPrixUnitaire());
         ligneCommandeFournisseur.setArticle(ArticleDto.toEntity(ligneCommandeFournisseurDto.getArticle()));
-        ligneCommandeFournisseur.setCommandeFournisseur(CommandeFournisseurDto.toEntity(ligneCommandeFournisseurDto.getCommandeFournisseur()));
+        ligneCommandeFournisseur.setIdEntreprise(ligneCommandeFournisseur.getIdEntreprise());
 
         return ligneCommandeFournisseur;
     }

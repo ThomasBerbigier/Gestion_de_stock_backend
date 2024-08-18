@@ -1,4 +1,4 @@
-package dto;
+package com.thomas.gestionDeStock.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.thomas.gestionDeStock.model.Categorie;
@@ -17,6 +17,8 @@ public class CategorieDto {
 
     private String designation;
 
+    private Integer idEntreprise;
+
     @JsonIgnore
     private List<ArticleDto> articles;
 
@@ -31,6 +33,7 @@ public class CategorieDto {
                 .id(categorie.getId())
                 .code(categorie.getCode())
                 .designation(categorie.getDesignation())
+                .idEntreprise(categorie.getIdEntreprise())
                 .build();
     }
 
@@ -43,6 +46,7 @@ public class CategorieDto {
         categorie.setId(categorieDto.getId());
         categorie.setCode(categorieDto.getCode());
         categorie.setDesignation(categorieDto.getDesignation());
+        categorie.setIdEntreprise(categorieDto.getIdEntreprise());
         return categorie;
     }
 }

@@ -1,5 +1,6 @@
-package dto;
+package com.thomas.gestionDeStock.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.thomas.gestionDeStock.model.Roles;
 import lombok.Builder;
 import lombok.Data;
@@ -12,6 +13,7 @@ public class RolesDto {
 
     private String roleName;
 
+    @JsonIgnore
     private UtilisateurDto utilisateur;
 
     // Entité vers Dto pour la récupération des données
@@ -23,7 +25,6 @@ public class RolesDto {
         return RolesDto.builder()
                 .id(role.getId())
                 .roleName(role.getRoleName())
-                .utilisateur(UtilisateurDto.fromEntity(role.getUtilisateur()))
                 .build();
     }
 

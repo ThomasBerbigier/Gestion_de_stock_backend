@@ -1,4 +1,4 @@
-package dto;
+package com.thomas.gestionDeStock.dto;
 
 import com.thomas.gestionDeStock.model.Article;
 import lombok.Builder;
@@ -26,6 +26,8 @@ public class ArticleDto {
 
     private CategorieDto categorie;
 
+    private Integer idEntreprise;
+
     // Entité vers Dto pour la récupération des données
     public static ArticleDto fromEntity(Article article) {
         if (article == null) {
@@ -40,6 +42,8 @@ public class ArticleDto {
                 .tauxTva(article.getTauxTva())
                 .prixUnitaireTtc(article.getPrixUnitaireTtc())
                 .photo(article.getPhoto())
+                .idEntreprise(article.getIdEntreprise())
+                .categorie(CategorieDto.fromEntity(article.getCategorie()))
                 .build();
     }
 
@@ -57,6 +61,8 @@ public class ArticleDto {
         article.setTauxTva(articleDto.getTauxTva());
         article.setPrixUnitaireTtc(articleDto.getPrixUnitaireTtc());
         article.setPhoto(articleDto.getPhoto());
+        article.setIdEntreprise(articleDto.getIdEntreprise());
+        article.setCategorie(CategorieDto.toEntity(articleDto.getCategorie()));
         return article;
     }
 }

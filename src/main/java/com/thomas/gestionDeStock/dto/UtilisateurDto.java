@@ -1,4 +1,4 @@
-package dto;
+package com.thomas.gestionDeStock.dto;
 
 import com.thomas.gestionDeStock.model.Utilisateur;
 import lombok.Builder;
@@ -6,6 +6,7 @@ import lombok.Data;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -47,7 +48,12 @@ public class UtilisateurDto {
                 .adresse(AdresseDto.fromEntity(utilisateur.getAdresse()))
                 .photo(utilisateur.getPhoto())
                 .entreprise(EntrepriseDto.fromEntity(utilisateur.getEntreprise()))
-                .roles(utilisateur.getRoles() != null ? utilisateur.getRoles().stream().map(RolesDto::fromEntity).toList() : null)
+                .roles(
+                        utilisateur.getRoles() != null ?
+                            utilisateur.getRoles().stream()
+                                .map(RolesDto::fromEntity)
+                                .collect(Collectors.toList()) : null
+                )
                 .build();
     }
 
@@ -67,7 +73,6 @@ public class UtilisateurDto {
         utilisateur.setAdresse(AdresseDto.toEntity(utilisateurDto.getAdresse()));
         utilisateur.setPhoto(utilisateurDto.getPhoto());
         utilisateur.setEntreprise(EntrepriseDto.toEntity(utilisateurDto.getEntreprise()));
-        utilisateur.setRoles(utilisateurDto.getRoles() != null ? utilisateurDto.getRoles().stream().map(RolesDto::toEntity).toList() : null);
 
         return utilisateur;
     }

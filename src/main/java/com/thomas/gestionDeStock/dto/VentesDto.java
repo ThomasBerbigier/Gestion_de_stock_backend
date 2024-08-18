@@ -1,10 +1,11 @@
-package dto;
+package com.thomas.gestionDeStock.dto;
 
 import com.thomas.gestionDeStock.model.Ventes;
 import lombok.Builder;
 import lombok.Data;
 
 import java.time.Instant;
+import java.util.List;
 
 @Data
 @Builder
@@ -18,6 +19,10 @@ public class VentesDto {
 
     private String commentaire;
 
+    private List<LigneVenteDto> ligneVentes;
+
+    private Integer idEntreprise;
+
     // Entité vers Dto pour la récupération des données
     public static VentesDto fromEntity(Ventes ventes) {
         if (ventes == null) {
@@ -27,7 +32,7 @@ public class VentesDto {
         return VentesDto.builder()
                 .id(ventes.getId())
                 .code(ventes.getCode())
-                .dateVente(ventes.getDateVente())
+                .idEntreprise(ventes.getIdEntreprise())
                 .commentaire(ventes.getCommentaire())
                 .build();
     }
@@ -41,8 +46,8 @@ public class VentesDto {
         Ventes ventes = new Ventes();
         ventes.setId(ventesDto.getId());
         ventes.setCode(ventesDto.getCode());
-        ventes.setDateVente(ventesDto.getDateVente());
         ventes.setCommentaire(ventesDto.getCommentaire());
+        ventes.setIdEntreprise(ventesDto.getIdEntreprise());
 
         return ventes;
     }

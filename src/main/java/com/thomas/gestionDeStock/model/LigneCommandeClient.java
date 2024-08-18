@@ -26,4 +26,7 @@ public class LigneCommandeClient  extends AbstractEntity{
     @ManyToOne
     @JoinColumn(name = "idcommandeclient")
     private CommandeClient commandeClient;
+
+    @Column(name = "identreprise")
+    private Integer idEntreprise;
 }

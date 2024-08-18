@@ -1,6 +1,7 @@
-package dto;
+package com.thomas.gestionDeStock.dto;
 
 import com.thomas.gestionDeStock.model.MouvementDeStock;
+import com.thomas.gestionDeStock.model.TypeMouvementDeStock;
 import lombok.Builder;
 import lombok.Data;
 
@@ -17,9 +18,11 @@ public class MouvementDeStockDto {
 
     private BigDecimal quantite;
 
-    private String typeMouvement;
+    private TypeMouvementDeStock typeMouvementDeStock;
 
     private ArticleDto article;
+
+    private Integer idEntreprise;
 
     // Entité vers Dto pour la récupération des données
     public static MouvementDeStockDto fromEntity(MouvementDeStock mouvementDeStock) {
@@ -31,8 +34,9 @@ public class MouvementDeStockDto {
                 .id(mouvementDeStock.getId())
                 .dateMouvement(mouvementDeStock.getDateMouvement())
                 .quantite(mouvementDeStock.getQuantite())
-                .typeMouvement(mouvementDeStock.getTypeMouvement())
+                .typeMouvementDeStock(mouvementDeStock.getTypeMouvementDeStock())
                 .article(ArticleDto.fromEntity(mouvementDeStock.getArticle()))
+                .idEntreprise(mouvementDeStock.getIdEntreprise())
                 .build();
     }
 
@@ -46,8 +50,9 @@ public class MouvementDeStockDto {
         mouvementDeStock.setId(mouvementDeStockDto.getId());
         mouvementDeStock.setDateMouvement(mouvementDeStockDto.getDateMouvement());
         mouvementDeStock.setQuantite(mouvementDeStockDto.getQuantite());
-        mouvementDeStock.setTypeMouvement(mouvementDeStockDto.getTypeMouvement());
+        mouvementDeStock.setTypeMouvementDeStock(mouvementDeStockDto.getTypeMouvementDeStock());
         mouvementDeStock.setArticle(ArticleDto.toEntity(mouvementDeStockDto.getArticle()));
+        mouvementDeStock.setIdEntreprise(mouvementDeStock.getIdEntreprise());
 
         return mouvementDeStock;
     }

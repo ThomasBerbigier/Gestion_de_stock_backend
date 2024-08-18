@@ -1,4 +1,4 @@
-package dto;
+package com.thomas.gestionDeStock.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.thomas.gestionDeStock.model.Entreprise;

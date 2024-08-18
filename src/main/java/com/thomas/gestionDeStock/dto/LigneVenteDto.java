@@ -1,4 +1,4 @@
-package dto;
+package com.thomas.gestionDeStock.dto;
 
 import com.thomas.gestionDeStock.model.LigneVente;
 import lombok.Builder;
@@ -18,6 +18,10 @@ public class LigneVenteDto {
 
     private VentesDto vente;
 
+    private ArticleDto article;
+
+    private Integer idEntreprise;
+
     // Entité vers Dto pour la récupération des données
     public static LigneVenteDto fromEntity(LigneVente ligneVente) {
         if (ligneVente == null) {
@@ -29,6 +33,8 @@ public class LigneVenteDto {
                 .quantite(ligneVente.getQuantite())
                 .prixUnitaire(ligneVente.getPrixUnitaire())
                 .vente(VentesDto.fromEntity(ligneVente.getVente()))
+                .article(ArticleDto.fromEntity(ligneVente.getArticle()))
+                .idEntreprise(ligneVente.getIdEntreprise())
                 .build();
     }
 
@@ -43,6 +49,8 @@ public class LigneVenteDto {
         ligneVente.setQuantite(ligneVenteDto.getQuantite());
         ligneVente.setPrixUnitaire(ligneVenteDto.getPrixUnitaire());
         ligneVente.setVente(VentesDto.toEntity(ligneVenteDto.getVente()));
+        ligneVente.setArticle(ArticleDto.toEntity(ligneVenteDto.getArticle()));
+        ligneVente.setIdEntreprise(ligneVente.getIdEntreprise());
 
         return ligneVente;
     }

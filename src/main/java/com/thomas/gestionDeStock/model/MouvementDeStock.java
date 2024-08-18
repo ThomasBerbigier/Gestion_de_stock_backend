@@ -20,10 +20,14 @@ public class MouvementDeStock extends AbstractEntity{
     @Column(name = "quantite")
     private BigDecimal quantite;
 
-    @Column(name = "typemouvement")
-    private String typeMouvement;
+    @Column(name = "typemouvementdestock")
+    @Enumerated(EnumType.STRING)
+    private TypeMouvementDeStock typeMouvementDeStock;
 
     @ManyToOne
     @JoinColumn(name = "idarticle")
     private Article article;
+
+    @Column(name = "identreprise")
+    private Integer idEntreprise;
 }
