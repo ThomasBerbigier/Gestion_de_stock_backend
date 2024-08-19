@@ -1,5 +1,12 @@
 package com.thomas.gestionDeStock.exception;
 
+import lombok.Getter;
+
+/**
+ * Énumération des codes d'erreur utilisés dans l'application.
+ * Chaque code d'erreur est associé à un entier unique pour faciliter l'identification et le traitement des erreurs.
+ */
+@Getter
 public enum ErrorCodes {
 
     ARTICLE_NOT_FOUND(1000),
@@ -18,13 +25,16 @@ public enum ErrorCodes {
     UTILISATEUR_NOT_FOUND(12000),
     VENTE_NOT_FOUND(13000);
 
-    private int code;
+    // Le code numérique associé à chaque erreur
+    private final int code;
 
+    /**
+     * Constructeur de l'énumération `ErrorCodes`.
+     *
+     * @param code Valeur entière associée au code d'erreur.
+     */
     ErrorCodes(int code) {
         this.code = code;
     }
 
-    public int getCode() {
-        return code;
-    }
 }
