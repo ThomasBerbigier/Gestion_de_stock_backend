@@ -17,6 +17,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+//
+//Implémentation du service pour la gestion des articles.
+//Cette classe fournit la logique métier pour les opérations CRUD sur les articles.
+//
 @Service
 @Slf4j
 public class ArticleServiceImpl implements ArticleService {
