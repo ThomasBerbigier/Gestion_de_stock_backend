@@ -17,3 +17,5 @@ server:
 flickr:
     apiKey: df7c9bb5a59e8408f9a0810dafec577e
     apiSecret: 2a3935bd96d7acf9
+    appKey : 72157720926912965-84b1d48e37e69e3a
+    appSecret: c5e6ec0851d1f2c1
