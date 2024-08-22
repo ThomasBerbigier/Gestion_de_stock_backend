@@ -25,7 +25,6 @@ public class CommandeFournisseurDto {
 
     private FournisseurDto fournisseur;
 
-    @JsonIgnore
     private List<LigneCommandeFournisseurDto> LigneCommandeFournisseur;
 
     // Entité vers Dto pour la récupération des données

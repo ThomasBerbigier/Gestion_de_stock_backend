@@ -24,6 +24,10 @@ public class MouvementDeStock extends AbstractEntity{
     @Enumerated(EnumType.STRING)
     private TypeMouvementDeStock typeMouvementDeStock;
 
+    @Column(name = "sourcemouvementdestock")
+    @Enumerated(EnumType.STRING)
+    private SourceMouvementDeStock sourceMouvementDeStock;
+
     @ManyToOne
     @JoinColumn(name = "idarticle")
     private Article article;

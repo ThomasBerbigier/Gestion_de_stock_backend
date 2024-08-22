@@ -1,6 +1,5 @@
 package com.thomas.gestionDeStock.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.thomas.gestionDeStock.model.CommandeClient;
 import com.thomas.gestionDeStock.model.EtatCommande;
 import lombok.Builder;
