@@ -1,6 +1,11 @@
 package com.thomas.gestionDeStock.controllers.api;
 
+
 import com.thomas.gestionDeStock.dto.ArticleDto;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,6 +16,7 @@ import static com.thomas.gestionDeStock.utils.Constants.APP_ROOT;
  * Interface définissant les endpoints de l'API pour la gestion des articles.
  * Cette interface sert de contrat pour l'implémentation du contrôleur des articles.
  */
+@Tag(name = "articles", description = "API pour la gestion des articles")
 public interface ArticleApi {
 
     /**
@@ -22,6 +28,11 @@ public interface ArticleApi {
     @PostMapping(value = APP_ROOT + "/articles/create",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Enregistrer un article", description = "Cette méthode permet d'enregistrer ou de modifier un article")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "L'objet article créé ou modifié"),
+            @ApiResponse(responseCode = "400", description = "L'objet article n'est pas valide")
+    })
     ArticleDto save(@RequestBody ArticleDto articleDto);
 
     /**
@@ -32,6 +43,11 @@ public interface ArticleApi {
      */
     @GetMapping(value = APP_ROOT + "/articles/{idArticle}",
             produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Rechercher un article par ID", description = " Cette méthode permet de rechercher un article par son ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "L'article a été trouvé dans la BDD"),
+            @ApiResponse(responseCode = "404", description = "Aucun article n'existe dans la BDD avec l'ID fourni")
+    })
     ArticleDto findById(@PathVariable("idArticle") Integer id);
 
     /**
@@ -42,6 +58,11 @@ public interface ArticleApi {
      */
     @GetMapping(value = APP_ROOT + "/articles/{codeArticle}",
             produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Rechercher un article par CODE", description = " Cette méthode permet de rechercher un article par son CODE")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "L'article a été trouvé dans la BDD"),
+            @ApiResponse(responseCode = "404", description = "Aucun article n'existe dans la BDD avec le CODE fourni")
+    })
     ArticleDto findByCodeArticle(@PathVariable("codeArticle") String codeArticle);
 
     /**
@@ -51,6 +72,10 @@ public interface ArticleApi {
      */
     @GetMapping(value = APP_ROOT + "/articles/all",
             produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Renvoi la liste des articles", description = " Cette méthode permet de rechercher et renvoyer la liste des articles existants dans la BDD")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Liste vide"),
+    })
     List<ArticleDto> findAll();
 
     /**
@@ -58,7 +83,11 @@ public interface ArticleApi {
      *
      * @param id L'ID de l'article à supprimer.
      */
-    @DeleteMapping(value = APP_ROOT + "/article/delete/{idArticle}")
+    @DeleteMapping(value = APP_ROOT + "/articles/delete/{idArticle}")
+    @Operation(summary = "Supprimer un article", description = " Cette méthode permet de supprimer un article par ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "L'article a été supprimé"),
+    })
     void delete(@PathVariable("idArticle") Integer id);
 
 }

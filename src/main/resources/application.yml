@@ -19,3 +19,12 @@ flickr:
     apiSecret: 2a3935bd96d7acf9
     appKey : 72157720926912965-84b1d48e37e69e3a
     appSecret: c5e6ec0851d1f2c1
+
+springdoc:
+    api-docs:
+        path: /v3/api-docs         # Chemin pour accéder à la documentation OpenAPI JSON
+    swagger-ui:
+        path: /swagger-ui.html      # Chemin pour accéder à l'interface utilisateur Swagger
+        operationsSorter: method    # Tri des opérations par méthode
+        tagsSorter: alpha           # Tri des tags par ordre alphabétique
+        disable-swagger-default-url: true  # Désactive l'URL par défaut de Swagger

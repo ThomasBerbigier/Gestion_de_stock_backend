@@ -14,6 +14,6 @@ public interface Constants {
      * Ce chemin est utilisé pour définir les préfixes des URL dans les contrôleurs et
      * les appels d'API, ce qui facilite la gestion des versions et des chemins d'API.
      */
-    public static String APP_ROOT = "gestiondestock/v1";
+    String APP_ROOT = "gestiondestock/v1";
 
 }
