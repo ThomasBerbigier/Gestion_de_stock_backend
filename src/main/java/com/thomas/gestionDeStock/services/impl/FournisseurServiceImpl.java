@@ -26,16 +26,16 @@ public class FournisseurServiceImpl implements FournisseurService {
     }
 
     @Override
-    public FournisseurDto save(FournisseurDto dto) {
-        List<String> errors = FournisseurValidator.validate(dto);
+    public FournisseurDto save(FournisseurDto fournisseurDto) {
+        List<String> errors = FournisseurValidator.validate(fournisseurDto);
         if (!errors.isEmpty()) {
-            log.error("Fournisseur is not valid {}", dto);
+            log.error("Fournisseur is not valid {}", fournisseurDto);
             throw new InvalidEntityException("Le fournisseur n'est pas valide", ErrorCodes.FOURNISSEUR_NOT_VALID, errors);
         }
 
         return FournisseurDto.fromEntity(
                 fournisseurRepository.save(
-                        FournisseurDto.toEntity(dto)
+                        FournisseurDto.toEntity(fournisseurDto)
                 )
         );
     }

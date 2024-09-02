@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface FournisseurService {
 
-    FournisseurDto save(FournisseurDto dto);
+    FournisseurDto save(FournisseurDto fournisseurDto);
 
     FournisseurDto findById(Integer id);
 

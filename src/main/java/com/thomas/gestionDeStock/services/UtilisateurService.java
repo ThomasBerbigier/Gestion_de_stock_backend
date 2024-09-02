@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface UtilisateurService {
 
-    UtilisateurDto save(UtilisateurDto dto);
+    UtilisateurDto save(UtilisateurDto utilisateurDto);
 
     UtilisateurDto findById(Integer id);
 

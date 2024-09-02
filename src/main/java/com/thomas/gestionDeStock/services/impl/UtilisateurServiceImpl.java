@@ -26,15 +26,15 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     }
 
     @Override
-    public UtilisateurDto save(UtilisateurDto dto) {
-        List<String> errors = UtilisateurValidator.validate(dto);
+    public UtilisateurDto save(UtilisateurDto utilisateurDto) {
+        List<String> errors = UtilisateurValidator.validate(utilisateurDto);
         if (!errors.isEmpty()) {
-            log.error("Utilisateur is not valid {}", dto);
+            log.error("Utilisateur is not valid {}", utilisateurDto);
             throw new InvalidEntityException("L'utilisateur n'est pas valide", ErrorCodes.UTILISATEUR_NOT_VALID, errors);
         }
         return UtilisateurDto.fromEntity(
                 utilisateurRepository.save(
-                        UtilisateurDto.toEntity(dto)
+                        UtilisateurDto.toEntity(utilisateurDto)
                 )
         );
     }

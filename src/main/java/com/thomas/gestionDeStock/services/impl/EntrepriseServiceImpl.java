@@ -25,7 +25,7 @@ public class EntrepriseServiceImpl implements EntrepriseService {
     }
 
     @Override
-    public EntrepriseDto save(EntrepriseDto dto) {
+    public EntrepriseDto save(EntrepriseDto entrepriseDto) {
 
         return  null;
     }
