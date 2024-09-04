@@ -10,7 +10,8 @@ spring:
         show-sql: false
         hibernate:
             ddl-auto: update
-
+        properties:
+            hibernate.session_factory.statement_inspector: com.thomas.gestionDeStock.inspector.MyStatementInspector
 server:
     port: 8081
 

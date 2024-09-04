@@ -19,7 +19,7 @@ public interface CommandeClientApi {
     ResponseEntity<CommandeClientDto> findByCode(@PathVariable("codeCommandeClient") String code);
 
     @GetMapping(APP_ROOT + "/commandesclients/{idCommandeClient}")
-    ResponseEntity<CommandeClientDto> findById(@PathVariable Integer idCommandeClient);
+    ResponseEntity<CommandeClientDto> findById(@PathVariable("idCommandeClient") Integer idCommandeClient);
 
     @GetMapping(APP_ROOT + "/commandesclients/all")
     ResponseEntity<List<CommandeClientDto>> findAll();
