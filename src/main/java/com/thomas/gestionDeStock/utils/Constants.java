@@ -38,6 +38,7 @@ public interface Constants {
     String UTILISATEUR_ENDPOINT = APP_ROOT + "/utilisateurs";
     String CREATE_UTILISATEUR_ENDPOINT = UTILISATEUR_ENDPOINT + "/create";
     String FIND_UTILISATEUR_BY_ID_ENDPOINT = UTILISATEUR_ENDPOINT + "/{idUtilisateur}";
+    String FIND_UTILISATEUR_BY_EMAIL_ENDPOINT = UTILISATEUR_ENDPOINT + "/find/{email}";
     String FIND_ALL_UTILISATEUR_ENDPOINT = UTILISATEUR_ENDPOINT + "/all";
     String DELETE_UTILISATEUR_ENDPOINT = UTILISATEUR_ENDPOINT + "/delete/{idUtilisateur}";
 
@@ -47,4 +48,6 @@ public interface Constants {
     String FIND_VENTES_BY_CODE_ENDPOINT = VENTES_ENDPOINT + "/{codeVentes}";
     String FIND_ALL_VENTES_ENDPOINT = VENTES_ENDPOINT + "/all";
     String DELETE_VENTES_ENDPOINT = VENTES_ENDPOINT + "/delete/{idVentes}";
+
+    String AUTHENTICATION_ENDPOINT = APP_ROOT + "/auth";
 }

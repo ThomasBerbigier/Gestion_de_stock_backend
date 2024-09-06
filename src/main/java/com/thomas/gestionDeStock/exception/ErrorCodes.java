@@ -29,13 +29,14 @@ public enum ErrorCodes {
     LIGNE_COMMANDE_FOURNISSEUR_NOT_FOUND(9000),
     LIGNE_COMMANDE_FOURNISSEUR_NOT_VALID(9001),
     LIGNE_VENTE_NOT_FOUND(10000),
-    LIGNE_VENTE_NOT_VALID(10000),
+    LIGNE_VENTE_NOT_VALID(10001),
     MOUVEMENT_STOCK_NOT_FOUND(11000),
-    MOUVEMENT_STOCK_NOT_VALID(11000),
+    MOUVEMENT_STOCK_NOT_VALID(11001),
     UTILISATEUR_NOT_FOUND(12000),
     UTILISATEUR_NOT_VALID(12001),
     VENTE_NOT_FOUND(13000),
-    VENTE_NOT_VALID(13001),;
+    VENTE_NOT_VALID(13001),
+    BAD_CREDENTIALS(15000);
 
     // Le code numérique associé à chaque erreur
     private final int code;
@@ -49,4 +50,7 @@ public enum ErrorCodes {
         this.code = code;
     }
 
+    public int getCode() {
+        return code;
+    }
 }

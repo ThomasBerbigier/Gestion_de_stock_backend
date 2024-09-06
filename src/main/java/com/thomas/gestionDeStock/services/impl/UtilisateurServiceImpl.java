@@ -69,6 +69,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         utilisateurRepository.deleteById(id);
     }
 
+    @Override
     public UtilisateurDto findByEmail(String email) {
         return utilisateurRepository.findUtilisateurByEmail(email)
                 .map(UtilisateurDto::fromEntity)

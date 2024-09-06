@@ -31,7 +31,7 @@ public class Entreprise extends AbstractEntity {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "numTel")
+    @Column(name = "numtel")
     private String numTel;
 
     @Column(name = "siteweb")

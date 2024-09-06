@@ -23,5 +23,6 @@ public interface UtilisateurApi {
     @DeleteMapping(DELETE_UTILISATEUR_ENDPOINT)
     void delete(@PathVariable("idUtilisateur") Integer id);
 
-    UtilisateurDto findByEmail(String email);
+    @GetMapping(FIND_UTILISATEUR_BY_EMAIL_ENDPOINT)
+    UtilisateurDto findByEmail(@PathVariable("email") String email);
 }

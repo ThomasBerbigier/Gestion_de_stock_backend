@@ -23,10 +23,10 @@ public class Utilisateur extends AbstractEntity{
     @Column(name = "email")
     private String email;
 
-    @Column(name = "dateDeNaissance")
+    @Column(name = "datedenaissance")
     private Instant dateDeNaissance;
 
-    @Column(name = "motDePasse")
+    @Column(name = "motdepasse")
     private String motDePasse;
 
     @Embedded
