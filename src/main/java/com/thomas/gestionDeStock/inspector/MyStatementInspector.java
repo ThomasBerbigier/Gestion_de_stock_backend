@@ -14,12 +14,16 @@ public class MyStatementInspector implements StatementInspector {
             // Extraire le nom de l'entité
             final String entityName = sql.substring(7, sql.indexOf("."));
 
+            // Vérifier que l'entité n'est pas entreprise ou roles, et qu'il y a un idEntreprise
             if (StringUtils.hasLength(entityName)
-                    && !entityName.toLowerCase().contains("entreprise")
-                    && !entityName.toLowerCase().contains("roles")
+                    && !entityName.toLowerCase().contains("entreprise")  // exclure entreprise
+                    && !sql.toLowerCase().contains("entreprise")         // exclure entreprise même avec alias
+                    && !entityName.toLowerCase().contains("roles")       // exclure roles
+                    && !sql.toLowerCase().contains("roles")              // exclure roles même avec alias
+                    && !entityName.equalsIgnoreCase("Entreprise")  // Vérification stricte
                     && StringUtils.hasLength(idEntreprise)) {
 
-                // Ajouter la condition WHERE pour filtrer par idEntreprise
+                // Seulement ajouter identreprise si la colonne existe pour l'entité
                 if (sql.contains("where")) {
                     sql = sql + " and " + entityName + ".identreprise = " + idEntreprise;
                 } else {
@@ -27,7 +31,7 @@ public class MyStatementInspector implements StatementInspector {
                 }
             }
         }
-        // Retourner la requête modifiée
         return sql;
     }
+
 }

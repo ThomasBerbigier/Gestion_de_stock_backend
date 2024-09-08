@@ -9,12 +9,18 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+
+import java.util.Arrays;
+import java.util.Collections;
+
+import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
 @EnableWebSecurity
@@ -35,12 +41,15 @@ public class SecurityConfiguration{
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                        session.sessionCreationPolicy(STATELESS)
                 )
                 .authorizeHttpRequests(authorize ->
                         authorize
                                 .requestMatchers("/gestiondestock/v1/auth/authenticate",
                                         "/gestiondestock/v1/entreprises/create",
+                                        "/gestiondestock/v1/utilisateurs/all",
+                                        "/gestiondestock/v1/categories/create",
+                                        "/gestiondestock/v1/articles/create",
                                         "/v2/api-docs",
                                         "/swagger-resources",
                                         "/swagger-resources/**",
@@ -51,12 +60,24 @@ public class SecurityConfiguration{
                                         "/swagger-ui/**",    // Modifié pour couvrir tout Swagger UI
                                         "/swagger-ui.html"
                                 ).permitAll()
-                                .anyRequest().authenticated()
-                );
-        http.addFilterBefore(applicationRequestFilter, UsernamePasswordAuthenticationFilter.class);
+                                .anyRequest().authenticated())
+                .addFilterBefore(applicationRequestFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
+    @Bean
+    public CorsFilter corsFilter() {
+        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        final CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        // Don't do this in production, use a proper list  of allowed origins
+        config.setAllowedOriginPatterns(Collections.singletonList("*"));
+        config.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Authorization"));
+        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "OPTIONS", "DELETE", "PATCH"));
+        source.registerCorsConfiguration("/**", config);
+        // some comment here
+        return new CorsFilter(source);
+    }
 
     // Exposer un AuthenticationManager bean
     @Bean
