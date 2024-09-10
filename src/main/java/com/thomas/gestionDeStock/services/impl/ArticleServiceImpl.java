@@ -1,11 +1,14 @@
 package com.thomas.gestionDeStock.services.impl;
 
 import com.thomas.gestionDeStock.dto.ArticleDto;
+import com.thomas.gestionDeStock.dto.LigneCommandeClientDto;
+import com.thomas.gestionDeStock.dto.LigneCommandeFournisseurDto;
+import com.thomas.gestionDeStock.dto.LigneVenteDto;
 import com.thomas.gestionDeStock.exception.EntityNotFoundException;
 import com.thomas.gestionDeStock.exception.ErrorCodes;
 import com.thomas.gestionDeStock.exception.InvalidEntityException;
 import com.thomas.gestionDeStock.model.Article;
-import com.thomas.gestionDeStock.repository.ArticleRepository;
+import com.thomas.gestionDeStock.repository.*;
 import com.thomas.gestionDeStock.services.ArticleService;
 import com.thomas.gestionDeStock.validator.ArticleValidator;
 import lombok.extern.slf4j.Slf4j;
@@ -25,15 +28,26 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ArticleServiceImpl implements ArticleService {
 
-    private final ArticleRepository articleRepository;
+    private final VentesRepository ventesRepository;
 
-    // Injection du repository via le constructeur pour suivre les bonnes pratiques de Spring
-    @Autowired
-    public ArticleServiceImpl(
-            ArticleRepository articleRepository
-    ) {
+    public ArticleServiceImpl(ArticleRepository articleRepository,
+                              LigneVenteRepository ligneVenteRepository,
+                              LigneCommandeClientRepository commandeClientRepository,
+                              LigneCommandeFournisseurRepository commandeFournisseurRepository, VentesRepository ventesRepository)
+    {
         this.articleRepository = articleRepository;
+        this.ligneVenteRepository = ligneVenteRepository;
+        this.commandeClientRepository = commandeClientRepository;
+        this.commandeFournisseurRepository = commandeFournisseurRepository;
+        this.ventesRepository = ventesRepository;
     }
+
+    private final ArticleRepository articleRepository;
+    private final LigneVenteRepository ligneVenteRepository;
+    private final LigneCommandeClientRepository commandeClientRepository;
+    private final LigneCommandeFournisseurRepository commandeFournisseurRepository;
+
+
 
     // Méthode pour sauvegarder un article
     @Override
@@ -96,6 +110,35 @@ public class ArticleServiceImpl implements ArticleService {
                 .map(ArticleDto::fromEntity)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<LigneVenteDto> findHistoriqueVentes(Integer idArticle) {
+        return ligneVenteRepository.findAllByArticleId(idArticle).stream()
+                .map(LigneVenteDto::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<LigneCommandeClientDto> findHistoriqueCommandeClient(Integer idArticle) {
+        return commandeClientRepository.findAllByArticleId(idArticle).stream()
+                .map(LigneCommandeClientDto::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<LigneCommandeFournisseurDto> findHistoriqueCommandeFournisseur(Integer idArticle) {
+        return commandeFournisseurRepository.findAllByArticleId(idArticle).stream()
+                .map(LigneCommandeFournisseurDto::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ArticleDto> findAllArticleByIdCategorie(Integer idCategorie) {
+        return articleRepository.findAllByCategorieId(idCategorie).stream()
+                .map(ArticleDto::fromEntity)
+                .collect(Collectors.toList());
+    }
+
     // Méthode pour supprimer un article par son ID
     @Override
     public void delete(Integer id) {

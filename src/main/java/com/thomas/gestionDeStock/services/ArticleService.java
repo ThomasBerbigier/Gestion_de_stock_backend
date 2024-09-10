@@ -1,6 +1,9 @@
 package com.thomas.gestionDeStock.services;
 
 import com.thomas.gestionDeStock.dto.ArticleDto;
+import com.thomas.gestionDeStock.dto.LigneCommandeClientDto;
+import com.thomas.gestionDeStock.dto.LigneCommandeFournisseurDto;
+import com.thomas.gestionDeStock.dto.LigneVenteDto;
 
 import java.util.List;
 
@@ -36,6 +39,16 @@ public interface ArticleService {
      * @return une liste de tous les articles.
      */
     List<ArticleDto> findAll();
+
+    List<LigneVenteDto> findHistoriqueVentes(Integer idArticle);
+
+    List<LigneCommandeClientDto> findHistoriqueCommandeClient(Integer idArticle);
+
+    List<LigneCommandeFournisseurDto> findHistoriqueCommandeFournisseur(Integer idArticle);
+
+    List<ArticleDto> findAllArticleByIdCategorie(Integer idCategorie);
+
+
 
     /**
      * Supprime un article par son identifiant.

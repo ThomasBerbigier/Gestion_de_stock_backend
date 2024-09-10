@@ -3,6 +3,7 @@ package com.thomas.gestionDeStock.handlers;
 import com.thomas.gestionDeStock.exception.EntityNotFoundException;
 import com.thomas.gestionDeStock.exception.ErrorCodes;
 import com.thomas.gestionDeStock.exception.InvalidEntityException;
+import com.thomas.gestionDeStock.exception.InvalidOperationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -30,6 +31,20 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ErrorDto> handleException(EntityNotFoundException exception, WebRequest webrequest) {
         // Définir le statut HTTP à 404 (Not Found)
         final HttpStatus notFound = HttpStatus.NOT_FOUND;
+        // Construire l'objet ErroDto avec les détails de l'exception
+        ErrorDto errorDto = ErrorDto.builder()
+                .code(exception.getErrorCode())
+                .httpCode(notFound.value())
+                .message(exception.getMessage())
+                .build();
+        // Retourner une réponse avec l'objet ErroDto et le statut HTTP 404
+        return new ResponseEntity<>(errorDto, notFound);
+    }
+
+    @ExceptionHandler({InvalidOperationException.class})
+    public ResponseEntity<ErrorDto> handleException(InvalidOperationException exception, WebRequest webrequest) {
+        // Définir le statut HTTP à 404 (Not Found)
+        final HttpStatus notFound = HttpStatus.BAD_REQUEST;
         // Construire l'objet ErroDto avec les détails de l'exception
         ErrorDto errorDto = ErrorDto.builder()
                 .code(exception.getErrorCode())

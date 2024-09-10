@@ -1,5 +1,6 @@
 package com.thomas.gestionDeStock.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.thomas.gestionDeStock.model.CommandeClient;
 import com.thomas.gestionDeStock.model.EtatCommande;
 import lombok.Builder;
@@ -24,6 +25,7 @@ public class CommandeClientDto {
 
     private ClientDto client;
 
+    @JsonIgnore
     private List<LigneCommandeClientDto> ligneCommandeClients;
 
     // Entité vers Dto pour la récupération des données
@@ -57,6 +59,10 @@ public class CommandeClientDto {
         commandeClient.setIdEntreprise(commandeClientDto.getIdEntreprise());
 
         return commandeClient;
+    }
+
+    public boolean isCommandeLivree() {
+        return EtatCommande.LIVREE.equals(this.etatCommande);
     }
 }
 

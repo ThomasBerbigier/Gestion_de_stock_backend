@@ -25,6 +25,7 @@ public class CommandeFournisseurDto {
 
     private FournisseurDto fournisseur;
 
+    @JsonIgnore
     private List<LigneCommandeFournisseurDto> LigneCommandeFournisseur;
 
     // Entité vers Dto pour la récupération des données
@@ -58,5 +59,9 @@ public class CommandeFournisseurDto {
         commandeFournisseur.setEtatCommande(commandeFournisseurDto.getEtatCommande());
 
         return commandeFournisseur;
+    }
+
+    public boolean isCommandeLivree() {
+        return EtatCommande.LIVREE.equals(this.etatCommande);
     }
 }

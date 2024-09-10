@@ -2,6 +2,9 @@ package com.thomas.gestionDeStock.controllers.api;
 
 
 import com.thomas.gestionDeStock.dto.ArticleDto;
+import com.thomas.gestionDeStock.dto.LigneCommandeClientDto;
+import com.thomas.gestionDeStock.dto.LigneCommandeFournisseurDto;
+import com.thomas.gestionDeStock.dto.LigneVenteDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -56,7 +59,7 @@ public interface ArticleApi {
      * @param codeArticle Le code de l'article à récupérer.
      * @return L'objet ArticleDto correspondant au code.
      */
-    @GetMapping(value = APP_ROOT + "/articles/{codeArticle}",
+    @GetMapping(value = APP_ROOT + "/articles/filter/{codeArticle}",
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Rechercher un article par CODE", description = " Cette méthode permet de rechercher un article par son CODE")
     @ApiResponses(value = {
@@ -77,6 +80,18 @@ public interface ArticleApi {
             @ApiResponse(responseCode = "200", description = "Liste vide"),
     })
     List<ArticleDto> findAll();
+
+    @GetMapping(value = APP_ROOT + "/articles/historique/vente/{idArticle}")
+    List<LigneVenteDto> findHistoriqueVentes(@PathVariable("idArticle") Integer idArticle);
+
+    @GetMapping(value = APP_ROOT + "/articles/historique/commandeclient/{idArticle}")
+    List<LigneCommandeClientDto> findHistoriqueCommandeClient(@PathVariable("idArticle")Integer idArticle);
+
+    @GetMapping(value = APP_ROOT + "/articles/historique/vente/commandefournisseur/{idArticle}")
+    List<LigneCommandeFournisseurDto> findHistoriqueCommandeFournisseur(@PathVariable("idArticle")Integer idArticle);
+
+    @GetMapping(value = APP_ROOT + "/articles/filter/categorie/{idCategorie}")
+    List<ArticleDto> findAllArticleByIdCategorie(@PathVariable("idCategorie")Integer idCategorie);
 
     /**
      * Supprime un article par son ID.

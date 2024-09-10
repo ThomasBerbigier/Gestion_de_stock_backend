@@ -2,6 +2,9 @@ package com.thomas.gestionDeStock.controllers;
 
 import com.thomas.gestionDeStock.controllers.api.ArticleApi;
 import com.thomas.gestionDeStock.dto.ArticleDto;
+import com.thomas.gestionDeStock.dto.LigneCommandeClientDto;
+import com.thomas.gestionDeStock.dto.LigneCommandeFournisseurDto;
+import com.thomas.gestionDeStock.dto.LigneVenteDto;
 import com.thomas.gestionDeStock.services.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
@@ -80,6 +83,26 @@ public class ArticleController implements ArticleApi {
     @Override
     public List<ArticleDto> findAll() {
         return articleService.findAll();
+    }
+
+    @Override
+    public List<LigneVenteDto> findHistoriqueVentes(Integer idArticle) {
+        return articleService.findHistoriqueVentes(idArticle);
+    }
+
+    @Override
+    public List<LigneCommandeClientDto> findHistoriqueCommandeClient(Integer idArticle) {
+        return articleService.findHistoriqueCommandeClient(idArticle);
+    }
+
+    @Override
+    public List<LigneCommandeFournisseurDto> findHistoriqueCommandeFournisseur(Integer idArticle) {
+        return articleService.findHistoriqueCommandeFournisseur(idArticle);
+    }
+
+    @Override
+    public List<ArticleDto> findAllArticleByIdCategorie(Integer idCategorie) {
+        return articleService.findAllArticleByIdCategorie(idCategorie);
     }
 
     /**
