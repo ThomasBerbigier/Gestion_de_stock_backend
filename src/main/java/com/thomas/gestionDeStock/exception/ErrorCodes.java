@@ -38,7 +38,10 @@ public enum ErrorCodes {
     UTILISATEUR_NOT_VALID(12001),
     VENTE_NOT_FOUND(13000),
     VENTE_NOT_VALID(13001),
-    BAD_CREDENTIALS(15000);
+    BAD_CREDENTIALS(15000),
+    SAVE_PHOTO_EXCEPTION(16000),
+    UNKNOW_CONTEXT(17000);
+
 
     // Le code numérique associé à chaque erreur
     private final int code;
