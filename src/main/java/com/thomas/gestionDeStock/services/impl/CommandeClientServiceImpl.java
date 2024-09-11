@@ -1,9 +1,6 @@
 package com.thomas.gestionDeStock.services.impl;
 
-import com.thomas.gestionDeStock.dto.ArticleDto;
-import com.thomas.gestionDeStock.dto.ClientDto;
-import com.thomas.gestionDeStock.dto.CommandeClientDto;
-import com.thomas.gestionDeStock.dto.LigneCommandeClientDto;
+import com.thomas.gestionDeStock.dto.*;
 import com.thomas.gestionDeStock.exception.EntityNotFoundException;
 import com.thomas.gestionDeStock.exception.ErrorCodes;
 import com.thomas.gestionDeStock.exception.InvalidEntityException;
@@ -14,6 +11,7 @@ import com.thomas.gestionDeStock.repository.ClientRepository;
 import com.thomas.gestionDeStock.repository.CommandeClientRepository;
 import com.thomas.gestionDeStock.repository.LigneCommandeClientRepository;
 import com.thomas.gestionDeStock.services.CommandeClientService;
+import com.thomas.gestionDeStock.services.MouvementDeStockService;
 import com.thomas.gestionDeStock.validator.ArticleValidator;
 import com.thomas.gestionDeStock.validator.CommandeClientValidator;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -52,6 +51,7 @@ public class CommandeClientServiceImpl implements CommandeClientService {
     private final LigneCommandeClientRepository ligneCommandeClientRepository;
     private final ClientRepository clientRepository;
     private final ArticleRepository articleRepository;
+    private final MouvementDeStockService mouvementDeStockService;
 
     /**
      * Constructeur avec injection des dépendances.
@@ -65,12 +65,13 @@ public class CommandeClientServiceImpl implements CommandeClientService {
             CommandeClientRepository commandeClientRepository,
             ClientRepository clientRepository,
             ArticleRepository articleRepository,
-            LigneCommandeClientRepository ligneCommandeClientRepository
+            LigneCommandeClientRepository ligneCommandeClientRepository, MouvementDeStockService mouvementDeStockService
     ) {
         this.commandeClientRepository = commandeClientRepository;
         this.clientRepository = clientRepository;
         this.articleRepository = articleRepository;
         this.ligneCommandeClientRepository = ligneCommandeClientRepository;
+        this.mouvementDeStockService = mouvementDeStockService;
     }
 
     /**
@@ -216,12 +217,13 @@ public class CommandeClientServiceImpl implements CommandeClientService {
         }
 
         CommandeClientDto commandeClient = checkEtatCommande(idCommande);
-
         commandeClient.setEtatCommande(etatCommande);
 
-        return CommandeClientDto.fromEntity(
-                commandeClientRepository.save(CommandeClientDto.toEntity(commandeClient)
-        ));
+        CommandeClient savedCmdClt = commandeClientRepository.save(CommandeClientDto.toEntity(commandeClient));
+        if (commandeClient.isCommandeLivree()) {
+            updateMvtStk(idCommande);
+        }
+        return CommandeClientDto.fromEntity(savedCmdClt);
     }
 
     @Override
@@ -359,5 +361,24 @@ public class CommandeClientServiceImpl implements CommandeClientService {
                     ErrorCodes.COMMANDE_CLIENT_NOT_FOUND);
         }
         return ligneCommandeClientOptional;
+    }
+
+    private void updateMvtStk(Integer idCommande) {
+        List<LigneCommandeClient> ligneCommandeClients = ligneCommandeClientRepository.findAllByCommandeClientId(idCommande);
+        ligneCommandeClients.forEach(lig -> {
+            effectuerSortie(lig);
+        });
+    }
+
+    private void effectuerSortie(LigneCommandeClient lig) {
+        MouvementDeStockDto mvtStkDto = MouvementDeStockDto.builder()
+                .article(ArticleDto.fromEntity(lig.getArticle()))
+                .dateMouvement(Instant.now())
+                .typeMouvementDeStock(TypeMouvementDeStock.SORTIE)
+                .sourceMouvementDeStock(SourceMouvementDeStock.COMMANDE_CLIENT)
+                .quantite(lig.getQuantite())
+                .idEntreprise(lig.getIdEntreprise())
+                .build();
+        mouvementDeStockService.sortieStock(mvtStkDto);
     }
 }

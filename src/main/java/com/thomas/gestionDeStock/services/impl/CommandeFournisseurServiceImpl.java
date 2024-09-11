@@ -8,6 +8,7 @@ import com.thomas.gestionDeStock.exception.InvalidOperationException;
 import com.thomas.gestionDeStock.model.*;
 import com.thomas.gestionDeStock.repository.*;
 import com.thomas.gestionDeStock.services.CommandeFournisseurService;
+import com.thomas.gestionDeStock.services.MouvementDeStockService;
 import com.thomas.gestionDeStock.validator.ArticleValidator;
 import com.thomas.gestionDeStock.validator.CommandeFournisseurValidator;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -29,18 +31,21 @@ public class CommandeFournisseurServiceImpl implements CommandeFournisseurServic
     private final LigneCommandeFournisseurRepository ligneCommandeFournisseurRepository;
     private final FournisseurRepository fournisseurRepository;
     private final ArticleRepository articleRepository;
+    private final MouvementDeStockService mouvementDeStockService;
 
     @Autowired
     public CommandeFournisseurServiceImpl(
             CommandeFournisseurRepository commandeFournisseurRepository,
             LigneCommandeFournisseurRepository ligneCommandeFournisseurRepository,
             FournisseurRepository fournisseurRepository,
-            ArticleRepository articleRepository)
+            ArticleRepository articleRepository,
+            MouvementDeStockService mouvementDeStockService)
     {
         this.commandeFournisseurRepository = commandeFournisseurRepository;
         this.ligneCommandeFournisseurRepository = ligneCommandeFournisseurRepository;
         this.fournisseurRepository = fournisseurRepository;
         this.articleRepository = articleRepository;
+        this.mouvementDeStockService = mouvementDeStockService;
     }
 
 
@@ -98,9 +103,11 @@ public class CommandeFournisseurServiceImpl implements CommandeFournisseurServic
         CommandeFournisseurDto commandeFournisseur = checkEtatCommande(idCommande);
         commandeFournisseur.setEtatCommande(etatCommande);
 
-        return CommandeFournisseurDto.fromEntity(
-                commandeFournisseurRepository.save(CommandeFournisseurDto.toEntity(commandeFournisseur))
-        );
+        CommandeFournisseur savedCommande = commandeFournisseurRepository.save(CommandeFournisseurDto.toEntity(commandeFournisseur));
+        if(commandeFournisseur.isCommandeLivree()) {
+            updateMvtStk(idCommande);
+        }
+        return CommandeFournisseurDto.fromEntity(savedCommande);
     }
 
     @Override
@@ -284,5 +291,24 @@ public class CommandeFournisseurServiceImpl implements CommandeFournisseurServic
                     "Aucune ligne commande fournisseur n'a ete trouve avec l'ID " + idLigneCommande, ErrorCodes.COMMANDE_FOURNISSEUR_NOT_FOUND);
         }
         return ligneCommandeFournisseurOptional;
+    }
+
+    private void updateMvtStk(Integer idCommande) {
+        List<LigneCommandeFournisseur> ligneCommandeFournisseurs = ligneCommandeFournisseurRepository.findAllByCommandeFournisseurId(idCommande);
+        ligneCommandeFournisseurs.forEach(lig -> {
+            effectuerEntree(lig);
+        });
+    }
+
+    private void effectuerEntree(LigneCommandeFournisseur lig) {
+        MouvementDeStockDto mvtStkDto = MouvementDeStockDto.builder()
+                .article(ArticleDto.fromEntity(lig.getArticle()))
+                .dateMouvement(Instant.now())
+                .typeMouvementDeStock(TypeMouvementDeStock.SORTIE)
+                .sourceMouvementDeStock(SourceMouvementDeStock.COMMANDE_FOURNISSEUR)
+                .quantite(lig.getQuantite())
+                .idEntreprise(lig.getIdEntreprise())
+                .build();
+        mouvementDeStockService.sortieStock(mvtStkDto);
     }
 }

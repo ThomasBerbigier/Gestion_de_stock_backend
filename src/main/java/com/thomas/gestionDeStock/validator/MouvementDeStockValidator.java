@@ -11,18 +11,18 @@ public class MouvementDeStockValidator {
     public static List<String> validate(MouvementDeStockDto dto) {
         List<String> errors = new ArrayList<>();
         if (dto == null) {
-            errors.add("Veuillez renseigner la date du mouvenent");
-            errors.add("Veuillez renseigner la quantite du mouvenent");
+            errors.add("Veuillez renseigner la date du mouvement");
+            errors.add("Veuillez renseigner la quantite du mouvement");
             errors.add("Veuillez renseigner l'article");
             errors.add("Veuillez renseigner le type du mouvement");
 
             return errors;
         }
         if (dto.getDateMouvement() == null) {
-            errors.add("Veuillez renseigner la date du mouvenent");
+            errors.add("Veuillez renseigner la date du mouvement");
         }
         if (dto.getQuantite() == null || dto.getQuantite().compareTo(BigDecimal.ZERO) == 0) {
-            errors.add("Veuillez renseigner la quantite du mouvenent");
+            errors.add("Veuillez renseigner la quantite du mouvement");
         }
         if (dto.getArticle() == null || dto.getArticle().getId() == null) {
             errors.add("Veuillez renseigner l'article");

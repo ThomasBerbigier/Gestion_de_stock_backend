@@ -1,17 +1,14 @@
 package com.thomas.gestionDeStock.services.impl;
 
-import com.thomas.gestionDeStock.dto.CommandeClientDto;
-import com.thomas.gestionDeStock.dto.LigneVenteDto;
-import com.thomas.gestionDeStock.dto.VentesDto;
+import com.thomas.gestionDeStock.dto.*;
 import com.thomas.gestionDeStock.exception.EntityNotFoundException;
 import com.thomas.gestionDeStock.exception.ErrorCodes;
 import com.thomas.gestionDeStock.exception.InvalidEntityException;
-import com.thomas.gestionDeStock.model.Article;
-import com.thomas.gestionDeStock.model.LigneVente;
-import com.thomas.gestionDeStock.model.Ventes;
+import com.thomas.gestionDeStock.model.*;
 import com.thomas.gestionDeStock.repository.ArticleRepository;
 import com.thomas.gestionDeStock.repository.LigneVenteRepository;
 import com.thomas.gestionDeStock.repository.VentesRepository;
+import com.thomas.gestionDeStock.services.MouvementDeStockService;
 import com.thomas.gestionDeStock.services.VentesService;
 import com.thomas.gestionDeStock.validator.VentesValidator;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -31,16 +29,19 @@ public class VentesServiceImpl implements VentesService {
     private final ArticleRepository articleRepository;
     private final VentesRepository ventesRepository;
     private final LigneVenteRepository ligneVenteRepository;
+    private final MouvementDeStockService mouvementDeStockService;
 
     @Autowired
     public VentesServiceImpl(
             ArticleRepository articleRepository,
             VentesRepository ventesRepository,
-            LigneVenteRepository ligneVenteRepository
+            LigneVenteRepository ligneVenteRepository,
+            MouvementDeStockService mouvementDeStockService
     ) {
         this.articleRepository = articleRepository;
         this.ventesRepository = ventesRepository;
         this.ligneVenteRepository = ligneVenteRepository;
+        this.mouvementDeStockService = mouvementDeStockService;
     }
 
 
@@ -67,6 +68,7 @@ public class VentesServiceImpl implements VentesService {
             LigneVente ligneVente = LigneVenteDto.toEntity(ligneVDto);
             ligneVente.setVente(savedVentes);
             ligneVenteRepository.save(ligneVente);
+            updateMvtStk(ligneVente);
         });
         return VentesDto.fromEntity(savedVentes);
     }
@@ -110,5 +112,17 @@ public class VentesServiceImpl implements VentesService {
             return;
         }
         ventesRepository.deleteById(id);
+    }
+
+    private void updateMvtStk(LigneVente lig) {
+        MouvementDeStockDto mvtStkDto = MouvementDeStockDto.builder()
+                .article(ArticleDto.fromEntity(lig.getArticle()))
+                .dateMouvement(Instant.now())
+                .typeMouvementDeStock(TypeMouvementDeStock.SORTIE)
+                .sourceMouvementDeStock(SourceMouvementDeStock.VENTE)
+                .quantite(lig.getQuantite())
+                .idEntreprise(lig.getIdEntreprise())
+                .build();
+        mouvementDeStockService.sortieStock(mvtStkDto);
     }
 }
