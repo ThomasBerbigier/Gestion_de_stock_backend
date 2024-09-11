@@ -1,5 +1,6 @@
 package com.thomas.gestionDeStock.services;
 
+import com.thomas.gestionDeStock.dto.ChangerMotDePasseUtilisateurDto;
 import com.thomas.gestionDeStock.dto.UtilisateurDto;
 
 import java.util.List;
@@ -15,4 +16,6 @@ public interface UtilisateurService {
     void delete(Integer id);
 
     UtilisateurDto findByEmail(String email);
+
+    UtilisateurDto changerMotDePasse(ChangerMotDePasseUtilisateurDto dto);
 }
