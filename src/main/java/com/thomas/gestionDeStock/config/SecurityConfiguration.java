@@ -50,6 +50,8 @@ public class SecurityConfiguration{
                                         "/gestiondestock/v1/utilisateurs/all",
                                         "/gestiondestock/v1/categories/create",
                                         "/gestiondestock/v1/articles/create",
+                                        "http://localhost:8081/v3/api-docs.yaml",
+                                        "/v3/api-docs.yaml",
                                         "/v2/api-docs",
                                         "/swagger-resources",
                                         "/swagger-resources/**",

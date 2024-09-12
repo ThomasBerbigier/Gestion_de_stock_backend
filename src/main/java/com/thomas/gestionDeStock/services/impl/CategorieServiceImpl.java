@@ -4,6 +4,9 @@ import com.thomas.gestionDeStock.dto.CategorieDto;
 import com.thomas.gestionDeStock.exception.EntityNotFoundException;
 import com.thomas.gestionDeStock.exception.ErrorCodes;
 import com.thomas.gestionDeStock.exception.InvalidEntityException;
+import com.thomas.gestionDeStock.exception.InvalidOperationException;
+import com.thomas.gestionDeStock.model.Article;
+import com.thomas.gestionDeStock.repository.ArticleRepository;
 import com.thomas.gestionDeStock.repository.CategorieRepository;
 import com.thomas.gestionDeStock.services.CategorieService;
 import com.thomas.gestionDeStock.validator.CategorieValidator;
@@ -20,12 +23,14 @@ import java.util.stream.Collectors;
 public class CategorieServiceImpl implements CategorieService {
 
     private final CategorieRepository categorieRepository;
+    private final ArticleRepository articleRepository;
 
     @Autowired
     public CategorieServiceImpl(
-            CategorieRepository categorieRepository
+            CategorieRepository categorieRepository, ArticleRepository articleRepository
     ) {
         this.categorieRepository = categorieRepository;
+        this.articleRepository = articleRepository;
     }
 
 
@@ -84,6 +89,11 @@ public class CategorieServiceImpl implements CategorieService {
         if (id == null) {
             log.error("L'ID de la catégorie à supprimer est nul");
             return;
+        }
+        List<Article> articles = articleRepository.findAllByCategorieId(id);
+        if (!articles.isEmpty()) {
+            throw new InvalidOperationException("Impossible de supprimer une catégorie présente dans des commandes clients ou fournisseurs",
+                    ErrorCodes.CATEGORY_ALREADY_IN_USE);
         }
         categorieRepository.deleteById(id);
     }

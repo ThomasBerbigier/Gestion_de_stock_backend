@@ -4,6 +4,7 @@ import com.thomas.gestionDeStock.dto.*;
 import com.thomas.gestionDeStock.exception.EntityNotFoundException;
 import com.thomas.gestionDeStock.exception.ErrorCodes;
 import com.thomas.gestionDeStock.exception.InvalidEntityException;
+import com.thomas.gestionDeStock.exception.InvalidOperationException;
 import com.thomas.gestionDeStock.model.*;
 import com.thomas.gestionDeStock.repository.ArticleRepository;
 import com.thomas.gestionDeStock.repository.LigneVenteRepository;
@@ -110,6 +111,11 @@ public class VentesServiceImpl implements VentesService {
         if(id == null) {
             log.error("L'id de la vente n'existe pas");
             return;
+        }
+        List<LigneVente> ligneVentes = ligneVenteRepository.findAllByVenteId(id);
+        if (!ligneVentes.isEmpty()) {
+            throw new InvalidOperationException("Impossible de supprimer une vente en cours",
+                    ErrorCodes.VENTE_ALREADY_IN_USE);
         }
         ventesRepository.deleteById(id);
     }

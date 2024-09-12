@@ -9,4 +9,5 @@ public interface LigneVenteRepository extends JpaRepository<LigneVente, Long> {
 
     List<LigneVente> findAllByArticleId(Integer idArticle);
 
+    List<LigneVente> findAllByVenteId(Integer id);
 }

@@ -4,6 +4,10 @@ import com.thomas.gestionDeStock.dto.FournisseurDto;
 import com.thomas.gestionDeStock.exception.EntityNotFoundException;
 import com.thomas.gestionDeStock.exception.ErrorCodes;
 import com.thomas.gestionDeStock.exception.InvalidEntityException;
+import com.thomas.gestionDeStock.exception.InvalidOperationException;
+import com.thomas.gestionDeStock.model.CommandeClient;
+import com.thomas.gestionDeStock.model.CommandeFournisseur;
+import com.thomas.gestionDeStock.repository.CommandeFournisseurRepository;
 import com.thomas.gestionDeStock.repository.FournisseurRepository;
 import com.thomas.gestionDeStock.services.FournisseurService;
 import com.thomas.gestionDeStock.validator.FournisseurValidator;
@@ -18,11 +22,13 @@ import java.util.stream.Collectors;
 public class FournisseurServiceImpl implements FournisseurService {
 
     private final FournisseurRepository fournisseurRepository;
+    private final CommandeFournisseurRepository commandeFournisseurRepository;
 
     public FournisseurServiceImpl(
-            FournisseurRepository fournisseurRepository
+            FournisseurRepository fournisseurRepository, CommandeFournisseurRepository commandeFournisseurRepository
     ) {
         this.fournisseurRepository = fournisseurRepository;
+        this.commandeFournisseurRepository = commandeFournisseurRepository;
     }
 
     @Override
@@ -63,7 +69,16 @@ public class FournisseurServiceImpl implements FournisseurService {
 
     @Override
     public void delete(Integer id) {
-
+        if (id == null) {
+            log.error("\"L'identifiant du fournisseur à supprimer est nul");
+            return;
+        }
+        List<CommandeFournisseur> commandeFournisseurs = commandeFournisseurRepository.findAllByFournisseurId(id);
+        if (!commandeFournisseurs.isEmpty()) {
+            throw new InvalidOperationException("Impossible de supprimer un fournisseur présent dans des commandes en cours",
+                    ErrorCodes.FOURNISSEUR_ALREADY_IN_USE);
+        }
+        fournisseurRepository.deleteById(id);
     }
 
 }

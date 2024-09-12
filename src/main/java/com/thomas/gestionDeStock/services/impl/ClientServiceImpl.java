@@ -4,8 +4,11 @@ import com.thomas.gestionDeStock.dto.ClientDto;
 import com.thomas.gestionDeStock.exception.EntityNotFoundException;
 import com.thomas.gestionDeStock.exception.ErrorCodes;
 import com.thomas.gestionDeStock.exception.InvalidEntityException;
+import com.thomas.gestionDeStock.exception.InvalidOperationException;
 import com.thomas.gestionDeStock.model.Client;
+import com.thomas.gestionDeStock.model.CommandeClient;
 import com.thomas.gestionDeStock.repository.ClientRepository;
+import com.thomas.gestionDeStock.repository.CommandeClientRepository;
 import com.thomas.gestionDeStock.services.ClientService;
 import com.thomas.gestionDeStock.validator.ClientValidator;
 import lombok.extern.slf4j.Slf4j;
@@ -22,11 +25,13 @@ public class ClientServiceImpl implements ClientService {
 
 
     private final ClientRepository clientRepository;
+    private final CommandeClientRepository commandeClientRepository;
 
     @Autowired
-    public ClientServiceImpl(ClientRepository clientRepository) {
+    public ClientServiceImpl(ClientRepository clientRepository, CommandeClientRepository commandeClientRepository) {
 
         this.clientRepository = clientRepository;
+        this.commandeClientRepository = commandeClientRepository;
     }
 
     @Override
@@ -72,6 +77,11 @@ public class ClientServiceImpl implements ClientService {
         if (id == null) {
             log.error("\"L'identifiant du client à supprimer est nul");
             return;
+        }
+        List<CommandeClient> commandeClients = commandeClientRepository.findAllByClientId(id);
+        if (!commandeClients.isEmpty()) {
+            throw new InvalidOperationException("Impossible de supprimer un client présent dans des commandes en cours",
+                    ErrorCodes.CLIENT_ALREADY_IN_USE);
         }
         clientRepository.deleteById(id);
     }

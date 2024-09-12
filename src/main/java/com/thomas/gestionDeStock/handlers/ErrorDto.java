@@ -38,6 +38,7 @@ public class ErrorDto {
      * Cette liste peut contenir plusieurs messages d'erreur, par exemple pour les erreurs de validation.
      * Elle est initialisée comme une liste vide pour éviter les problèmes de nullité.
      */
+    @Builder.Default
     private List<String> errors = new ArrayList<>();
 
 }

@@ -7,7 +7,11 @@ import com.thomas.gestionDeStock.dto.LigneVenteDto;
 import com.thomas.gestionDeStock.exception.EntityNotFoundException;
 import com.thomas.gestionDeStock.exception.ErrorCodes;
 import com.thomas.gestionDeStock.exception.InvalidEntityException;
+import com.thomas.gestionDeStock.exception.InvalidOperationException;
 import com.thomas.gestionDeStock.model.Article;
+import com.thomas.gestionDeStock.model.LigneCommandeClient;
+import com.thomas.gestionDeStock.model.LigneCommandeFournisseur;
+import com.thomas.gestionDeStock.model.LigneVente;
 import com.thomas.gestionDeStock.repository.*;
 import com.thomas.gestionDeStock.services.ArticleService;
 import com.thomas.gestionDeStock.validator.ArticleValidator;
@@ -28,7 +32,10 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ArticleServiceImpl implements ArticleService {
 
-    private final VentesRepository ventesRepository;
+    private final ArticleRepository articleRepository;
+    private final LigneVenteRepository ligneVenteRepository;
+    private final LigneCommandeClientRepository commandeClientRepository;
+    private final LigneCommandeFournisseurRepository commandeFournisseurRepository;
 
     public ArticleServiceImpl(ArticleRepository articleRepository,
                               LigneVenteRepository ligneVenteRepository,
@@ -39,13 +46,8 @@ public class ArticleServiceImpl implements ArticleService {
         this.ligneVenteRepository = ligneVenteRepository;
         this.commandeClientRepository = commandeClientRepository;
         this.commandeFournisseurRepository = commandeFournisseurRepository;
-        this.ventesRepository = ventesRepository;
     }
 
-    private final ArticleRepository articleRepository;
-    private final LigneVenteRepository ligneVenteRepository;
-    private final LigneCommandeClientRepository commandeClientRepository;
-    private final LigneCommandeFournisseurRepository commandeFournisseurRepository;
 
 
 
@@ -143,8 +145,23 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public void delete(Integer id) {
         if(id == null) {
-            log.error("\"L'identifiant de l'article à supprimer est nul");
+            log.error("L'identifiant de l'article à supprimer est nul");
             return;
+        }
+        List<LigneCommandeClient> ligneCommandeClients = commandeClientRepository.findAllByArticleId(id);
+        if(!ligneCommandeClients.isEmpty()) {
+            throw new InvalidOperationException("Impossible de supprimer un article présent dans des commandes clients",
+                    ErrorCodes.ARTICLE_ALREADY_IN_USE);
+        }
+        List<LigneCommandeFournisseur> ligneCommandeFournisseurs = commandeFournisseurRepository.findAllByArticleId(id);
+        if(!ligneCommandeFournisseurs.isEmpty()) {
+            throw new InvalidOperationException("Impossible de supprimer un article présent dans des commandes fournisseurs",
+                    ErrorCodes.ARTICLE_ALREADY_IN_USE);
+        }
+        List<LigneVente> ligneVentes = ligneVenteRepository.findAllByArticleId(id);
+        if(!ligneVentes.isEmpty()) {
+            throw new InvalidOperationException("Impossible de supprimer un article présent dans une vente",
+                    ErrorCodes.ARTICLE_ALREADY_IN_USE);
         }
         articleRepository.deleteById(id);
     }
