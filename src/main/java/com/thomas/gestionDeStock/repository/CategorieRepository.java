@@ -9,6 +9,4 @@ public interface CategorieRepository extends JpaRepository<Categorie, Integer> {
 
     Optional<Categorie> findCategorieByCode(String code);
 
-
-
 }

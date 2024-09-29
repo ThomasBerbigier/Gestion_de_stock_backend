@@ -26,7 +26,6 @@ public class CategorieDto {
     public static CategorieDto fromEntity(Categorie categorie) {
         if(categorie == null) {
             return null;
-            //TODO throw an exception
         }
         // fais un mapping de catégorie vers catégorieDTO
         return CategorieDto.builder()
@@ -40,7 +39,6 @@ public class CategorieDto {
     public static Categorie toEntity(CategorieDto categorieDto) {
         if(categorieDto == null) {
             return null;
-            //TODO throw an exception
         }
         Categorie categorie = new Categorie();
         categorie.setId(categorieDto.getId());

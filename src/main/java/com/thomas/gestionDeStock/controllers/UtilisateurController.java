@@ -1,6 +1,7 @@
 package com.thomas.gestionDeStock.controllers;
 
 import com.thomas.gestionDeStock.controllers.api.UtilisateurApi;
+import com.thomas.gestionDeStock.dto.ChangerMotDePasseUtilisateurDto;
 import com.thomas.gestionDeStock.dto.UtilisateurDto;
 import com.thomas.gestionDeStock.services.UtilisateurService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,11 @@ public class UtilisateurController implements UtilisateurApi {
     @Override
     public UtilisateurDto save(UtilisateurDto utilisateurDto) {
         return utilisateurService.save(utilisateurDto);
+    }
+
+    @Override
+    public UtilisateurDto changerMotDePasse(ChangerMotDePasseUtilisateurDto dto) {
+        return utilisateurService.changerMotDePasse(dto);
     }
 
     @Override

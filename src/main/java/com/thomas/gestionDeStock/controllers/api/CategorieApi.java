@@ -26,7 +26,7 @@ public interface CategorieApi {
     })
     CategorieDto save(@RequestBody CategorieDto categorieDto);
 
-    @GetMapping(value = APP_ROOT + "/categories/{codeCategorie}",
+    @GetMapping(value = APP_ROOT + "/categories/code/{codeCategorie}",
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Rechercher une catégorie par CODE", description = " Cette méthode permet de rechercher une catégorie par son CODE")
     @ApiResponses(value = {
@@ -35,7 +35,7 @@ public interface CategorieApi {
     })
     CategorieDto findByCode(@PathVariable("codeCategorie") String codeCategorie);
 
-    @GetMapping(value = APP_ROOT + "/categories/{idCategorie}",
+    @GetMapping(value = APP_ROOT + "/categories/id/{idCategorie}",
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Rechercher une catégorie par ID", description = " Cette méthode permet de rechercher une catégorie par son ID")
     @ApiResponses(value = {

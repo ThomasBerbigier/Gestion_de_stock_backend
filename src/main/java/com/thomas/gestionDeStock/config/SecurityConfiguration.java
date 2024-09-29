@@ -49,8 +49,20 @@ public class SecurityConfiguration{
                                         "/gestiondestock/v1/entreprises/create",
                                         "/gestiondestock/v1/utilisateurs/all",
                                         "/gestiondestock/v1/categories/create",
+                                        "/gestiondestock/v1/categories/all",
+                                        "/gestiondestock/v1/categories/**",
                                         "/gestiondestock/v1/articles/create",
+                                        "/gestiondestock/v1/articles/all",
+                                        "/gestiondestock/v1/articles/**",
+                                        "/gestiondestock/v1/clients/create",
+                                        "/gestiondestock/v1/clients/all",
+                                        "/gestiondestock/v1/clients/**",
+                                        "/gestiondestock/v1/fournisseurs/create",
+                                        "/gestiondestock/v1/fournisseurs/all",
+                                        "/gestiondestock/v1/fournisseurs/**",
                                         "http://localhost:8081/v3/api-docs.yaml",
+                                        "/gestiondestock/v1/utilisateurs/find/**",
+                                        "/gestiondestock/v1/utilisateurs/update/password",
                                         "/v3/api-docs.yaml",
                                         "/v2/api-docs",
                                         "/swagger-resources",
@@ -74,6 +86,7 @@ public class SecurityConfiguration{
         config.setAllowCredentials(true);
         // Don't do this in production, use a proper list  of allowed origins
         config.setAllowedOriginPatterns(Collections.singletonList("*"));
+        config.addAllowedOrigin("http://localhost:4200");
         config.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Authorization"));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "OPTIONS", "DELETE", "PATCH"));
         source.registerCorsConfiguration("/**", config);

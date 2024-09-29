@@ -1,5 +1,6 @@
 package com.thomas.gestionDeStock.controllers.api;
 
+import com.thomas.gestionDeStock.dto.ChangerMotDePasseUtilisateurDto;
 import com.thomas.gestionDeStock.dto.UtilisateurDto;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,9 @@ public interface UtilisateurApi {
 
     @PostMapping(CREATE_UTILISATEUR_ENDPOINT)
     UtilisateurDto save(@RequestBody UtilisateurDto utilisateurDto);
+
+    @PostMapping(UTILISATEUR_ENDPOINT + "/update/password")
+    UtilisateurDto changerMotDePasse(@RequestBody ChangerMotDePasseUtilisateurDto dto);
 
     @GetMapping(FIND_UTILISATEUR_BY_ID_ENDPOINT)
     UtilisateurDto findById(@PathVariable("idUtilisateur") Integer id);

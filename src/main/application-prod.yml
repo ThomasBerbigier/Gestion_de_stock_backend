@@ -1,0 +1,29 @@
+spring:
+  datasource:
+    url: ${JDBC_DATABASE_URL}
+    username: ${JDBC_DATABASE_USERNAME}
+    password: ${JDBC_DATABASE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+
+server:
+  port: 8080  # Par défaut pour Heroku
+
+flickr:
+  apiKey: ${FLICKR_API_KEY}
+  apiSecret: ${FLICKR_API_SECRET}
+  appKey: ${FLICKR_APP_KEY}
+  appSecret: ${FLICKR_APP_SECRET}
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs  # Chemin pour accéder à la documentation OpenAPI JSON
+  swagger-ui:
+    path: /swagger-ui.html  # Chemin pour accéder à l'interface utilisateur Swagger
+    operationsSorter: method  # Tri des opérations par méthode
+    tagsSorter: alpha  # Tri des tags par ordre alphabétique
+    disable-swagger-default-url: true  # Désactive l'URL par défaut de Swagger
